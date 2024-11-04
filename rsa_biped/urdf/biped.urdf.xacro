@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<robot name="biped" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find rsa_biped)/urdf/xacros/servo.xacro" />
+    <xacro:include filename="$(find rsa_biped)/urdf/xacros/left_leg.xacro" />
+    <xacro:include filename="$(find rsa_biped)/urdf/xacros/right_leg.xacro" />
+
+    <!-- World Link -->
+    <link name="world" />
+
+    <!-- Bridge Link -->
+    <link name="bridge_link">
+        <visual>
+            <origin xyz="0.117 -0.141 -0.093" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://rsa_biped/meshes/bridge.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+    </link>
+
+    <joint name="bridge_joint" type="fixed">
+        <parent link="world" />
+        <child link="bridge_link" />
+        <origin xyz="0 0 0.5" rpy="${PI/2} 0 0" />
+    </joint>
+
+    <!-- ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- ===============         LEFT LEG           =============== -->
+    <!-- ========================================================== -->
+    <!-- ========================================================== -->
+
+    <!-- Left Hip -->
+    <xacro:left_hip parent_link="bridge_link" xyz="0 -0.035 0.04" rpy="0 0 0" />
+
+    <!-- Left Hip-Knee Link -->
+    <link name="left_hip_knee_link">
+        <visual>
+            <origin xyz="0.007 0.002 -0.002" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://rsa_biped/meshes/servo_horn_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+    </link>
+
+    <!-- Left Upper Half Link -->
+    <link name="left_hip_knee_upper_half_link" />
+
+    <!-- Left Lower Half Link -->
+    <link name="left_hip_knee_lower_half_link" />
+
+    <joint name="left_hip_knee_upper_joint" type="fixed">
+        <origin xyz="0 0.025 0.01" rpy="0 0 0" />
+        <parent link="left_hip_knee_upper_half_link" />
+        <child link="left_hip_knee_link" />
+    </joint>
+
+    <joint name="left_hip_knee_lower_joint" type="fixed">
+        <origin xyz="0 0.025 -0.01" rpy="0 ${PI} ${PI}" />
+        <parent link="left_hip_knee_link" />
+        <child link="left_hip_knee_lower_half_link" />
+    </joint>
+
+    <joint name="left_hip_knee_joint_1" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="left_hip_link_servo_motor_link" />
+        <child link="left_hip_knee_upper_half_link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="1000" velocity="0.1" />
+    </joint>
+
+    <!-- Left Knee Servo Link -->
+    <link name="left_knee_servo_link" />
+
+    <joint name="left_hip_knee_joint_2" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="left_hip_knee_lower_half_link" />
+        <child link="left_knee_servo_link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="1000" velocity="0.1" />
+    </joint>
+
+    <joint name="left_knee_servo_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 ${PI} 0" />
+        <parent link="left_knee_servo_link" />
+        <child link="left_knee_link_servo_motor_link" />
+    </joint>
+
+    <!-- Left Knee -->
+    <xacro:left_knee parent_link="left_hip_knee_lower_half_link" xyz="0 -0.025 0.0305" rpy="0 0 0" />
+
+    <!-- Left Foot Link -->
+    <xacro:left_foot parent_link="left_knee_link" xyz="0 -0.025 -0.03" rpy="0 ${PI} 0" />
+
+    <joint name="left_ankle_joint" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="left_foot_servo_link" />
+        <child link="left_ankle_link_servo_motor_link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="1000" velocity="0.1" />
+    </joint>
+
+    <!-- Left Ankle -->
+    <xacro:left_ankle parent_link="left_foot_servo_link" xyz="0.01 -0.01 -0.0225" rpy="0 0 ${PI/2}" />
+
+    <!-- ========================================================== -->
+    <!-- ========================================================== -->
+    <!-- ===============         RIGHT LEG          =============== -->
+    <!-- ========================================================== -->
+    <!-- ========================================================== -->
+
+    <!-- Right Hip -->
+    <xacro:right_hip parent_link="bridge_link" xyz="0 -0.035 -0.04" rpy="0 0 0" />
+
+    <!-- Right Hip-Knee Link -->
+    <link name="right_hip_knee_link">
+        <visual>
+            <origin xyz="0.007 0.002 -0.002" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://rsa_biped/meshes/servo_horn_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+    </link>
+
+    <!-- Right Upper Half Link -->
+    <link name="right_hip_knee_upper_half_link" />
+
+    <!-- Right Lower Half Link -->
+    <link name="right_hip_knee_lower_half_link" />
+
+    <joint name="right_hip_knee_upper_joint" type="fixed">
+        <origin xyz="0 0.025 0.01" rpy="0 0 0" />
+        <parent link="right_hip_knee_upper_half_link" />
+        <child link="right_hip_knee_link" />
+    </joint>
+
+    <joint name="right_hip_knee_lower_joint" type="fixed">
+        <origin xyz="0 0.025 -0.01" rpy="0 ${PI} ${PI}" />
+        <parent link="right_hip_knee_link" />
+        <child link="right_hip_knee_lower_half_link" />
+    </joint>
+
+    <joint name="right_hip_knee_joint_1" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="right_hip_link_servo_motor_link" />
+        <child link="right_hip_knee_upper_half_link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="1000" velocity="0.1" />
+    </joint>
+
+    <!-- Right Knee Servo Link -->
+    <link name="right_knee_servo_link" />
+
+    <joint name="right_hip_knee_joint_2" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="right_hip_knee_lower_half_link" />
+        <child link="right_knee_servo_link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="1000" velocity="0.1" />
+    </joint>
+
+    <joint name="right_knee_servo_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 ${PI} 0" />
+        <parent link="right_knee_servo_link" />
+        <child link="right_knee_link_servo_motor_link" />
+    </joint>
+
+    <!-- Right Knee -->
+    <xacro:right_knee parent_link="right_hip_knee_lower_half_link" xyz="0 -0.1 0" rpy="0 0 0" />
+
+    <!-- Right Foot Link -->
+    <xacro:right_foot parent_link="right_knee_link" xyz="0 -0.025 0.03" rpy="0 0 0" />
+
+    <joint name="right_ankle_joint" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="right_foot_servo_link" />
+        <child link="right_ankle_link_servo_motor_link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="1000" velocity="0.1" />
+    </joint>
+
+    <!-- Right Ankle -->
+    <xacro:right_ankle parent_link="right_foot_servo_link" xyz="-0.01 -0.01 -0.0225" rpy="${PI} 0 -${PI/2}" />
+
+</robot>
