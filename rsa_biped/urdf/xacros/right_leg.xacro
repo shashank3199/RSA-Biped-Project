@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find rsa_biped)/urdf/xacros/servo.xacro" />
+
+    <xacro:macro name="right_hip" params="parent_link xyz rpy">
+        <link name="right_hip_link">
+            <visual>
+                <origin xyz="0.117 -0.108 -0.049" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://rsa_biped/meshes/hip_servo_holder.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="white">
+                    <color rgba="1 1 1 1" />
+                </material>
+            </visual>
+        </link>
+
+        <joint name="${parent_link}_right_hip_joint" type="fixed">
+            <parent link="${parent_link}" />
+            <child link="right_hip_link" />
+            <origin xyz="${xyz}" rpy="${rpy}" />
+        </joint>
+
+        <xacro:servo_motor parent_link="right_hip_link" xyz="0 -0.01 0.02" rpy="0 0 ${PI}" />
+    </xacro:macro>
+
+    <xacro:macro name="right_knee" params="parent_link xyz rpy">
+        <link name="right_knee_link">
+            <visual>
+                <origin xyz="0.001 0.003 -0.029" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://rsa_biped/meshes/knee_servo_holder.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="white">
+                    <color rgba="1 1 1 1" />
+                </material>
+            </visual>
+        </link>
+
+        <joint name="${parent_link}_right_knee_joint" type="fixed">
+            <parent link="${parent_link}" />
+            <child link="right_knee_link" />
+            <origin xyz="${xyz}" rpy="${rpy}" />
+        </joint>
+
+        <xacro:servo_motor parent_link="right_knee_link" xyz="0 -0.025 -0.0306" rpy="0 0 0" reverse="true" />
+    </xacro:macro>
+
+
+    <xacro:macro name="right_foot" params="parent_link xyz rpy">
+        <link name="right_foot_link">
+            <visual>
+                <origin xyz="0.001 -0.001 -0.009" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://rsa_biped/meshes/foot_link.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="white">
+                    <color rgba="1 1 1 1" />
+                </material>
+            </visual>
+        </link>
+
+        <joint name="${parent_link}_right_foot_joint" type="fixed">
+            <parent link="${parent_link}" />
+            <child link="right_foot_link" />
+            <origin xyz="${xyz}" rpy="${rpy}" />
+        </joint>
+
+        <link name="right_foot_servo_link" />
+
+        <joint name="right_knee_link_servo_joint" type="fixed">
+            <origin xyz="0 -0.008 0" rpy="0 0 0" />
+            <parent link="right_foot_link" />
+            <child link="right_foot_servo_link" />
+        </joint>
+
+    </xacro:macro>
+
+    <xacro:macro name="right_ankle" params="parent_link xyz rpy">
+        <link name="right_ankle_link">
+            <visual>
+                <origin xyz="0.001 -0.000 -0.025" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://rsa_biped/meshes/foot_servo_holder.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="white">
+                    <color rgba="1 1 1 1" />
+                </material>
+            </visual>
+        </link>
+
+        <xacro:servo_motor parent_link="right_ankle_link" xyz="0 -0.01 -0.02" rpy="${PI} 0 0" reverse="true" />
+    </xacro:macro>
+
+</robot>

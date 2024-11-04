@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="PI" value="3.14159265359" />
+
+    <xacro:macro name="servo_motor" params="parent_link xyz rpy reverse:=false">
+        <link name="${parent_link}_servo_motor_link">
+            <visual>
+                <origin xyz="0 -0.010 -0.04" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://rsa_biped/meshes/Servo_MG995.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="black">
+                    <color rgba="0.1 0.1 0.1 0.8" />
+                </material>
+            </visual>
+        </link>
+
+        <joint name="${parent_link}_servo_motor_joint" type="fixed">
+            <origin xyz="${xyz}" rpy="${rpy}" />
+            <xacro:if value="${not reverse}">
+                <parent link="${parent_link}" />
+                <child link="${parent_link}_servo_motor_link" />
+            </xacro:if>
+            <xacro:if value="${reverse}">
+                <parent link="${parent_link}_servo_motor_link" />
+                <child link="${parent_link}" />
+            </xacro:if>
+        </joint>
+    </xacro:macro>
+
+    <!-- IMU Sensor (placeholder) -->
+    <!-- <link name="imu_sensor_link">
+        <visual>
+            <geometry>
+                <box size="0.02 0.02 0.02" />
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="imu_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="imu_sensor_link" />
+        <origin xyz="0 0 0.1" rpy="0 0 0" />
+    </joint> -->
+
+    <!-- Ultrasonic Sensor (placeholder) -->
+    <!-- <link name="ultrasonic_sensor_link">
+        <visual>
+            <geometry>
+                <box size="0.02 0.02 0.02" />
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="ultrasonic_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="ultrasonic_sensor_link" />
+        <origin xyz="0.05 0 0.1" rpy="0 0 0" />
+    </joint> -->
+
+</robot>
