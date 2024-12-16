@@ -8,8 +8,12 @@ The STL files for the biped are borrowed from [link](https://www.instructables.c
 
 3. **Mesh Files:** The mesh files are used to visualize the robot's appearance in RViz. The mesh files are linked in the URDF to provide a realistic representation of the robot.
 
-### ROS2 Command -
+## ROS2 Command -
 
 ```bash
 ros2 launch rsa_biped view_robot.launch.py
+```
+
+```bash
+ros2 launch rsa_biped biped_bringup.launch.py
 ```
